@@ -161,6 +161,21 @@ def main():
     car_insurance_model.split_data_set_if_test_not_split('Sale', 0.25, 2)
 
     ####################################################################################################################
+    # create CSV file of the preprocessed data
+
+    car_insurance_model._x_train.to_csv('Data_Out/x_train.csv', index=False)
+    car_insurance_model._y_train.to_csv('Data_Out/y_train.csv', index=False)
+    car_insurance_model._x_test.to_csv('Data_Out/x_test.csv', index=False)
+    car_insurance_model._y_test.to_csv('Data_Out/y_test.csv', index=False)
+
+    '''
+    car_insurance_model._x_train = pd.read_csv('Data_Out/x_train.csv')
+    car_insurance_model._y_train = pd.read_csv('Data_Out/y_train.csv')
+    car_insurance_model._x_test = pd.read_csv('Data_Out/x_test.csv')
+    car_insurance_model._y_test = pd.read_csv('Data_Out/y_test.csv')
+    '''
+
+    ####################################################################################################################
     # Knn model
     # gridsearch for knn
 
@@ -184,21 +199,7 @@ def main():
     # hyper-parameters found when performing the grid-search
 
     # k-fold cross validation for optimum hyper-parameters to validate SVM model
-    car_insurance_model.svm_model(1/16, 10, 10)
-    ####################################################################################################################
-
-    ####################################################################################################################
-    # BEST MODEL
-    ####################################################################################################################
-
-    # split data into X matrix of attributes and y vector for target
-    car_insurance_model.split_data_data_set_X_data_set_y('Sale')
-
-    # Define model found to produce the best results
-    my_svm_model = SVC(C=10, decision_function_shape='ovo', degree=3, gamma=1/16, kernel='rbf')
-    # fits the SVM model to the entire data set to be tested on a new test set if needed
-    my_svm_model.fit(car_insurance_model._data_set_X, car_insurance_model._data_set_y.values.ravel())
-
+    # car_insurance_model.svm_model(1/16, 10, 10)
     ####################################################################################################################
 
 

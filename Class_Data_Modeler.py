@@ -9,7 +9,6 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import RobustScaler
 from sklearn.linear_model import LinearRegression
-import matplotlib.pyplot as plt
 from sklearn.linear_model import Ridge
 
 from sklearn.linear_model import Lasso
