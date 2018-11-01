@@ -4,29 +4,21 @@ from sklearn import neighbors
 from sklearn.svm import SVC
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import cross_validate
-from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
 from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import RobustScaler
-from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
-from scipy.special import inv_boxcox
-import matplotlib as mlp
-mlp.use('TkAgg')
 import matplotlib.pyplot as plt
 from sklearn.linear_model import Ridge
 
-from sklearn import datasets
-from sklearn.linear_model import LassoCV
 from sklearn.linear_model import Lasso
-from sklearn.model_selection import KFold
 from sklearn.model_selection import GridSearchCV
-import numpy as np
 from sklearn.kernel_ridge import KernelRidge
 
 from Class_Data_Preprocessor import DataPreprocessor
 from sklearn.ensemble import RandomForestClassifier
+
 
 class DataModeler(DataPreprocessor):
     def __init__(self, train_data_set, test_data_set):

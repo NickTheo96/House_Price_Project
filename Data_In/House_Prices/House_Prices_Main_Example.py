@@ -1,5 +1,4 @@
 import pandas as pd
-from scipy.special import boxcox
 
 from Class_Data_Modeler import DataModeler
 
