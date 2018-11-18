@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from xgboost import XGBClassifier
+from catboost import CatBoostClassifier
 
 
 ####################################################################################################################
@@ -98,8 +99,24 @@ model_adult.drop_attribute("native-country")
 
 # delete the full stop in the test data set so that the test and predicted values can be compared
 for i in range(len(model_adult._y_test.values)):
-    model_adult._y_test.values[i] = model_adult._y_test.values[i].strip('.')
+    if model_adult._y_test.values[i]=='<=50K.':
+        model_adult._y_test.values[i] = 0
+    elif model_adult._y_test.values[i]=='>50K.':
+        model_adult._y_test.values[i] = 1
+    else:
+        print("error for target value")
+        break
 
+for i in range(len(model_adult._y_train.values)):
+    if model_adult._y_train.values[i]=='<=50K':
+        model_adult._y_train.values[i] = 0
+    elif model_adult._y_train.values[i]=='>50K':
+        model_adult._y_train.values[i] = 1
+    else:
+        print("error for target value")
+        break
+
+####################################################################################################################
 # eta typical final values to be used: 0.01-0.2
 # max_depth Typical values: 3 - 10
 # subsample Typical values: 0.5-1
@@ -114,10 +131,32 @@ for i in range(len(model_adult._y_test.values)):
 # grid_param_xgboost = {'eta': [0.01, 0.1, 0.2], 'max_depth': [6, 10]}
 # model_adult.classification_model_grid_search(XGBClassifier, grid_param_xgboost, 3)
 
-tuned_parameters_xgboost = {'eta': 0.01, 'min_child_weight': 1, 'max_depth': 6, 'gamma': 0, 'subsample': 1,
-                            "colsample_bytree": 1, 'lambda': 0, 'alpha': 0}
+# tuned_parameters_xgboost = {'eta': 0.01, 'min_child_weight': 1, 'max_depth': 6, 'gamma': 0, 'subsample': 1,
+#                             "colsample_bytree": 1, 'lambda': 0, 'alpha': 0}
 # tuned_parameters_xgboost = {'eta': 0.01, 'max_depth': 6}
-model_adult.classification_model(XGBClassifier, tuned_parameters_xgboost, 10)
+# model_adult.classification_model(XGBClassifier, tuned_parameters_xgboost, 10)
+
+####################################################################################################################
+'''
+grid_param_catboost = {'depth':[3,1,2,6,4,5,7,8,9,10],
+          'iterations':[250,100,500,1000],
+          'learning_rate':[0.03,0.001,0.01,0.1,0.2,0.3], 
+          'l2_leaf_reg':[3,1,5,10,100],
+          'border_count':[32,5,10,20,50,100,200],
+          'ctr_border_count':[50,5,10,20,100,200],
+          'thread_count':4}
+'''
+
+grid_param_catboost = {'depth': [1, 3, 10],
+          'iterations': [100, 200, 300],
+          'learning_rate': [0.001, 0.01, 0.1],
+          'l2_leaf_reg': [1, 10, 100],
+        # 'border_count':[10, 50, 100],
+        #  'ctr_border_count':[10, 50, 100]
+            }
+model_adult.classification_model_grid_search(CatBoostClassifier, grid_param_catboost, 2)
+
+####################################################################################################################
 
 ####################################################################################################################
 # random forest model

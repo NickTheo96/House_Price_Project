@@ -4,6 +4,9 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from xgboost import XGBClassifier
+from catboost import CatBoostClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import classification_report
 
 
 ####################################################################################################################
@@ -96,10 +99,7 @@ model_adult.drop_attribute("native-country")
 # #print(model_adult._test_data_set)
 # model_adult.delete_unnecessary_one_hot_encoded_columns()
 
-# delete the full stop in the test data set so that the test and predicted values can be compared
-for i in range(len(model_adult._y_test.values)):
-    model_adult._y_test.values[i] = model_adult._y_test.values[i].strip('.')
-
+####################################################################################################################
 # eta typical final values to be used: 0.01-0.2
 # max_depth Typical values: 3 - 10
 # subsample Typical values: 0.5-1
@@ -114,10 +114,77 @@ for i in range(len(model_adult._y_test.values)):
 # grid_param_xgboost = {'eta': [0.01, 0.1, 0.2], 'max_depth': [6, 10]}
 # model_adult.classification_model_grid_search(XGBClassifier, grid_param_xgboost, 3)
 
-tuned_parameters_xgboost = {'eta': 0.01, 'min_child_weight': 1, 'max_depth': 6, 'gamma': 0, 'subsample': 1,
-                            "colsample_bytree": 1, 'lambda': 0, 'alpha': 0}
+# tuned_parameters_xgboost = {'eta': 0.01, 'min_child_weight': 1, 'max_depth': 6, 'gamma': 0, 'subsample': 1,
+#                             "colsample_bytree": 1, 'lambda': 0, 'alpha': 0}
 # tuned_parameters_xgboost = {'eta': 0.01, 'max_depth': 6}
-model_adult.classification_model(XGBClassifier, tuned_parameters_xgboost, 10)
+# model_adult.classification_model(XGBClassifier, tuned_parameters_xgboost, 10)
+
+
+
+####################################################################################################################
+
+# delete the full stop in the test data set so that the test and predicted values can be compared
+for i in range(len(model_adult._y_test.values)):
+    if model_adult._y_test.values[i]=='<=50K.':
+        model_adult._y_test.values[i] = 0
+    elif model_adult._y_test.values[i]=='>50K.':
+        model_adult._y_test.values[i] = 1
+    else:
+        print("error for target value")
+        break
+
+for i in range(len(model_adult._y_train.values)):
+    if model_adult._y_train.values[i]=='<=50K':
+        model_adult._y_train.values[i] = 0
+    elif model_adult._y_train.values[i]=='>50K':
+        model_adult._y_train.values[i] = 1
+    else:
+        print("error for target value")
+        break
+
+'''
+grid_param_catboost = {'depth':[3,1,2,6,4,5,7,8,9,10],
+          'iterations':[250,100,500,1000],
+          'learning_rate':[0.03,0.001,0.01,0.1,0.2,0.3], 
+          'l2_leaf_reg':[3,1,5,10,100],
+          'border_count':[32,5,10,20,50,100,200],
+          'ctr_border_count':[50,5,10,20,100,200],
+          'thread_count':4}
+'''
+
+grid_param_catboost = {'depth': [1]
+        #'depth': [1, 3, 10],
+       #   'iterations': [100, 200, 300],
+      #    'learning_rate': [0.001, 0.01, 0.1],
+       #   'l2_leaf_reg': [1, 10, 100],
+        # 'border_count':[10, 50, 100],
+        #  'ctr_border_count':[10, 50, 100]
+            }
+
+
+
+x_train = model_adult._train_data_set
+y_train = model_adult._y_train.values.astype(int)
+x_test = model_adult._test_data_set
+y_test = model_adult._y_test.astype(int)
+
+cb_model = GridSearchCV(CatBoostClassifier(), grid_param_catboost, scoring="roc_auc", cv=2, n_jobs=-1)
+
+
+cb_model.fit(x_train, y_train)
+
+y_true, y_pred = y_test, cb_model.predict(x_test)
+print(classification_report(y_true, y_pred))  # prints a summary of the grid search
+print('The best parameters for the model is', cb_model.best_params_)  # prints the best parameters foun
+print('The results are:', cb_model.cv_results_)  # prints all the result
+# prints the scoring for each model in the grid
+for param, score in zip(cb_model.cv_results_['params'], cb_model.cv_results_['mean_test_score']):
+    print(param, score)
+
+
+# model_adult.classification_model_grid_search(CatBoostClassifier, grid_param_catboost, 2)
+
+####################################################################################################################
 
 ####################################################################################################################
 # random forest model
