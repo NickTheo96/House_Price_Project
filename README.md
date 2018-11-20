@@ -4,7 +4,7 @@
 The objective of this project is to load in any data set within a CSV file, expore pre-process and then build a supervised
 learning model. Both classification and regression models can be built. 
 
-This repository contains examples of how the package [simplemachinelearning](https://github.com/nickolastheodoulou/simplemachinelearning.git) is run on varous datasets to build a number of models.
+This repository contains examples of how our package [simplemachinelearning](https://github.com/nickolastheodoulou/simplemachinelearning.git) is run on varous datasets to build a number of models.
 
 ## Description of the file structure ##
 
