@@ -1,20 +1,15 @@
 # Machine Learning Supervised Learning Project #
 
-## Outline of Project ##
+## Outline of Repository ##
 The objective of this project is to load in any data set within a CSV file, expore pre-process and then build a supervised
-learning model. Both classification and regression models can be built
+learning model. Both classification and regression models can be built. 
+
+This repository contains examples of how our package [simplemachinelearning](https://github.com/nickolastheodoulou/simplemachinelearning.git) is run on varous datasets to build a number of models.
 
 ## Description of the file structure ##
 
 * The code is all contained in the main directory
-* main.py is where the main program is executed and calls methods from the DataModeler class.
-* Class_Data_Loader.py contains the class DataLoader that loads in the data from a CSV file and stores it as an object
-* Class_Data_Explorer.py contains the class DataExplorer that inherits DataLoader. It's purpose is to print and 
-plot various properties of the data so that it can be analysed
-* Class_Data_Preprocessor contains the class DataPreprocessor that pre-processes the data
-using various methods such as normalising and one-hot encoding
-* Class_Data_Modeler contains Data_Modeler which models the data and performs cross
-validation
+* main.py is where the main program is executed and contains the most recent dataset being worked on.
 * Data_In contains various data sets and main examples to build a model for the particular data set
 * Data_Out contains all various plots that the code produces saved as a pdf file
 
@@ -56,6 +51,5 @@ test set respectively. Iris_Main_Example.py within Iris contains the example cod
 
 To run these example codes simply copy and paste any Main_Example.py into main.py and run.
 ## How to run the code ##
-Ensure all the packages are installed, set the working directory to Machine-Learning-Project and run main.py. If 
-there are any problems please email me at: <nickolastheodoulou@hotmail.com>.
+Ensure simplemachinelearning installed using pip install simplemachinelearning, set the working directory to Machine-Learning-Project and run main.py. If there are any problems please email us at: <nickolastheodoulou@hotmail.com> or <denisj123@hotmail.com>.
 
